@@ -1,6 +1,7 @@
 package com.example.demo.Contoller;
 
 import com.example.demo.model.Customer;
+import com.example.demo.service.WebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.CustomerService;
@@ -13,9 +14,12 @@ public class CustomerController {
 
     private CustomerService customerService;
 
+    private final WebService webHookService;
+
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, WebService webHookService) {
         this.customerService = customerService;
+        this.webHookService = webHookService;
     }
 
     //получение списка кастомеров с их заказами
@@ -28,6 +32,7 @@ public class CustomerController {
     //добавление кастомера
     @PostMapping("/addCustomer")
     public void addCustomer(@RequestBody Customer customer){
+        webHookService.send(customer);
         customerService.saveCustomer(customer);
     }
 

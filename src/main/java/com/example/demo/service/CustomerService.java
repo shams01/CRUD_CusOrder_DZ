@@ -3,7 +3,10 @@ package com.example.demo.service;
 import com.example.demo.model.Customer;
 import com.example.demo.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +23,8 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    @Async
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void saveCustomer(Customer customer){
         customerRepository.save(customer);
     }
@@ -27,8 +32,4 @@ public class CustomerService {
     public Customer getCustomerById(Long id) {
         return customerRepository.getById(id);
     }
-
-//    public Customer findCustomerById(Long id) {
-//        return customerRepository.getById(id);
-//    }
 }
